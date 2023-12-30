@@ -147,7 +147,7 @@ function git_prompt_make_custom_theme() {
 function gp_set_file_var() {
   local envar="${1}"
   local file="${2}"
-  if eval "[[ -n \"\${${envar}+x}\" && -r \"\${${envar}+x}\" ]]" ; then # is envar set to a readable file?
+  if eval "[[ -n \"\${${envar}}\" && -r \"\${${envar}}\" ]]" ; then # is envar set to a readable file?
     local basefile
     eval "basefile=\"\`basename \\\"\${${envar}}\\\"\`\""   # assign basefile
     if [[ "${basefile}" = "${file}" || "${basefile}" = ".${file}" ]]; then
