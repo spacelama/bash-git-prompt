@@ -306,10 +306,12 @@ function setLastCommandState() {
 }
 
 function we_are_on_repo() {
-  if [[ -e "$(git rev-parse --git-dir 2> /dev/null)" ]]; then
+  if timeout -s 9 0.1 git rev-parse --git-dir >& /dev/null ; then
     echo 1
+    return 0
   else
     echo 0
+    return 1
   fi
 }
 
@@ -325,7 +327,7 @@ function update_old_git_prompt() {
 function setGitPrompt() {
   update_old_git_prompt
 
-  local repo=$(git rev-parse --show-toplevel 2> /dev/null)
+  local repo=$(we_are_on_repo > /dev/null && timeout -s 9 0.1 git rev-parse --show-toplevel 2> /dev/null)
   if [[ ! -e "${repo}" ]] && [[ "${GIT_PROMPT_ONLY_IN_REPO-}" = 1 ]]; then
     # we do not permit bash-git-prompt outside git repos, so nothing to do
     PS1="${OLD_GITPROMPT}"

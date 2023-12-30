@@ -36,12 +36,12 @@ else
   remote_url='.'
 fi
 
-gitstatus=$( LC_ALL=C timeout 1 git status ${_ignore_submodules} --untracked-files="${__GIT_PROMPT_SHOW_UNTRACKED_FILES:-normal}" --porcelain --branch )
+gitstatus=$( LC_ALL=C timeout -k 0.1 1 git status ${_ignore_submodules} --untracked-files="${__GIT_PROMPT_SHOW_UNTRACKED_FILES:-normal}" --porcelain --branch )
 
 # if the status is fatal, exit now
 [[ ! "${?}" ]] && exit 0
 
-git_dir="$(git rev-parse --git-dir 2>/dev/null)"
+git_dir="$(timeout -s 9 0.1 git rev-parse --git-dir 2>/dev/null)"
 [[ -z "${git_dir:+x}" ]] && exit 0
 
 __git_prompt_read ()
